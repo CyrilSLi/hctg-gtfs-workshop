@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Winnipeg Transit Map</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1/dist/leaflet.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1/dist/MarkerCluster.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1/dist/leaflet.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1/dist/leaflet.markercluster.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5/papaparse.min.js"></script>
+</head>
+<body style="margin: 0;">
+    <div id="app" style="width: 100%; height: 100vh; display: flex; flex-direction: column; align-items: center;">
+        <h1>Winnipeg Transit Map</h1>
+        <div id="map" style="width: 100%; flex: 1;"></div>
+    </div>
+    <script>
+        const map = L.map('map').setView([49.88, -97.15], 10);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(map);
+
+        (async () => {
+            const trips = Papa.parse(await fetch("gtfs/trips.txt").then(res => res.text()), { header: true }).data;
+            const stops = Papa.parse(await fetch("gtfs/stops.txt").then(res => res.text()), { header: true }).data;
+            const shapes = Papa.parse(await fetch("gtfs/shapes.txt").then(res => res.text()), { header: true }).data;
+
+            const shapesById = {};
+            shapes.forEach(point => {
+                if (!(point.shape_id in shapesById)) {
+                    shapesById[parseInt(point.shape_id)] = [];
+                }
+                shapesById[parseInt(point.shape_id)][parseInt(point.shape_pt_sequence)] = [
+                    parseFloat(point.shape_pt_lat),
+                    parseFloat(point.shape_pt_lon)
+                ];
+            });
+            Object.entries(shapesById).forEach(([shapeId, shape]) => {
+                shapesById[shapeId] = shape.filter(pt => pt);
+            });
+            console.log(shapesById);
+        })();
+    </script>
+</body>
+</html>
