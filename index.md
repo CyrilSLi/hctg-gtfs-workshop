@@ -8,6 +8,8 @@
 
 ## Tutorial Files
 
+Download GTFS files for your local transit system (a good directory of transit feeds is Transitland, linked above) and place them in `gtfs/`, replacing the files currently in it if applicable. The following are tutorial files which show the process of building a Leaflet map with GTFS data step-by-step:
+
 - [step-1.html](./step-1.html)
 - [step-2.html](./step-2.html)
 - [step-3.html](./step-3.html)

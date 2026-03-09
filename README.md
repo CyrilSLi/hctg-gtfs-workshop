@@ -1,0 +1,3 @@
+# HCTG GTFS Workshop
+
+This is a project I originally created for a workshop on GTFS and Leaflet.js for TransitTime, part of [Hack Club: The Game](https://game.hackclub.com/). The final product from the workshop is a Leaflet map which displays a transit agency's routes using GTFS data, with darker shading indicating multiple overlapping routes. Read [index.md](https://cyrilsli.github.io/hctg-gtfs-workshop/) to get started!
